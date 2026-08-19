@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tell us about your content — Social AI Filter</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/onboarding.css">
+</head>
+<body>
+  <main class="onboarding-page">
+    <section class="onboarding-card">
+      <div class="onboarding-brand"><span>Social AI</span> <b>Filter</b></div>
+      <div class="step-label">PERSONALIZE YOUR AI</div>
+      <h1>Tell us about your content</h1>
+      <p class="intro">This helps Social AI Filter understand what matters to you when it prioritizes messages, opportunities and content.</p>
+
+      <form id="creator-profile-form">
+        <label>What type of content do you create?
+          <textarea name="content_description" rows="4" maxlength="1000" placeholder="Example: I create gaming videos, tutorials, reviews and short-form clips focused on FPS games." required></textarea>
+        </label>
+
+        <label>What topics do you post about?
+          <input name="content_topics" type="text" maxlength="500" placeholder="Example: FPS games, gaming tips, esports, PC hardware" required>
+          <small>Separate topics with commas.</small>
+        </label>
+
+        <label>What type of creator are you?
+          <select name="creator_type" required>
+            <option value="" disabled selected>Select your primary creator type</option>
+            <option>Gaming Creator</option>
+            <option>Streamer</option>
+            <option>YouTuber</option>
+            <option>Short-form Video Creator</option>
+            <option>TikTok Creator</option>
+            <option>Instagram Creator</option>
+            <option>Influencer</option>
+            <option>Tech Creator</option>
+            <option>Education Creator</option>
+            <option>Commentator</option>
+            <option>Podcaster</option>
+            <option>Musician</option>
+            <option>Artist / Designer</option>
+            <option>Writer / Blogger</option>
+            <option>Comedy Creator</option>
+            <option>Beauty / Fashion Creator</option>
+            <option>Fitness / Wellness Creator</option>
+            <option>Food / Cooking Creator</option>
+            <option>Travel Creator</option>
+            <option>Lifestyle Creator</option>
+            <option>Business / Entrepreneurship Creator</option>
+            <option>Finance Creator</option>
+            <option>Sports Creator</option>
+            <option>News / Commentary Creator</option>
+            <option>Educational / Tutorial Creator</option>
+            <option>Community Creator</option>
+            <option>Brand / Business Account</option>
+            <option>Other</option>
+          </select>
+        </label>
+
+        <p id="profile-message" class="profile-message" aria-live="polite"></p>
+        <button class="primary-button" type="submit">Continue to dashboard</button>
+      </form>
+    </section>
+  </main>
+  <script src="js/supabase.js"></script>
+  <script src="js/onboarding.js"></script>
+</body>
+</html>
