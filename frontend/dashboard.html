@@ -17,13 +17,13 @@
         <a class="nav-link" href="inbox.html">Inbox</a>
         <a class="nav-link" href="opportunities.html">Opportunities</a>
         <a class="nav-link" href="content.html">Content</a>
-        <a class="nav-link" href="smart-priorities.html">Smart Priorities</a>
         <a class="nav-link" href="automation.html">Automation</a>
+        <a class="nav-link" href="smart-priorities.html">Smart Priorities</a>
         <a class="nav-link" href="settings.html">Settings</a>
       </nav>
       <div class="sidebar-user">
-        <div class="avatar">M</div>
-        <div><strong>Mosken</strong><small>Creator</small></div>
+        <div class="avatar" id="sidebarAvatar">?</div>
+        <div><strong id="sidebarName">Loading...</strong><small id="sidebarCreatorType">Creator</small></div>
       </div>
     </aside>
     <button class="sidebar-overlay" id="sidebarOverlay" aria-label="Close navigation"></button>
@@ -37,17 +37,27 @@
         </div>
         <div class="topbar-actions">
           <button class="icon-button" aria-label="Notifications">🔔</button>
-          <div class="avatar">M</div>
+          <div class="avatar" id="topbarAvatar">?</div>
         </div>
       </header>
 
       <section class="welcome-row">
         <div>
           <p class="eyebrow">AI COMMUNICATION INTELLIGENCE</p>
-          <h2>Good afternoon, Mosken.</h2>
+          <h2 id="welcomeName">Good afternoon.</h2>
           <p class="muted">Here are the conversations that deserve your attention.</p>
         </div>
         <a class="primary-button" href="inbox.html">Open inbox</a>
+      </section>
+
+      <section class="profile-summary panel" aria-label="Creator profile">
+        <div>
+          <p class="eyebrow">YOUR CREATOR PROFILE</p>
+          <h3 id="profileCreatorType">Creator profile</h3>
+          <p id="profileDescription" class="muted">Your content profile helps the AI understand what matters to you.</p>
+          <p id="profileTopics" class="profile-topics"></p>
+        </div>
+        <a href="onboarding.html" class="secondary-button">Edit profile</a>
       </section>
 
       <section class="stats-grid" aria-label="Message overview">
@@ -71,7 +81,8 @@
       </section>
     </main>
   </div>
-  <script src="js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
   <script src="js/app.js"></script>
   <script src="js/dashboard.js"></script>
 </body>
