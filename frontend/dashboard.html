@@ -13,72 +13,19 @@
     <aside class="sidebar" id="sidebar" aria-label="Main navigation">
       <div class="brand">Social AI <span>Filter</span></div>
       <nav class="nav-list">
-        <a class="nav-link active" href="dashboard.html">Dashboard</a>
-        <a class="nav-link" href="inbox.html">Inbox</a>
-        <a class="nav-link" href="opportunities.html">Opportunities</a>
-        <a class="nav-link" href="content.html">Content</a>
-        <a class="nav-link" href="automation.html">Automation</a>
-        <a class="nav-link" href="smart-priorities.html">Smart Priorities</a>
-        <a class="nav-link" href="settings.html">Settings</a>
+        <a class="nav-link active" href="dashboard.html">Dashboard</a><a class="nav-link" href="inbox.html">Inbox</a><a class="nav-link" href="opportunities.html">Opportunities</a><a class="nav-link" href="content.html">Content</a><a class="nav-link" href="automation.html">Automation</a><a class="nav-link" href="smart-priorities.html">Smart Priorities</a><a class="nav-link" href="settings.html">Settings</a>
       </nav>
-      <div class="sidebar-user">
-        <div class="avatar" id="sidebarAvatar">?</div>
-        <div><strong id="sidebarName">Loading...</strong><small id="sidebarCreatorType">Creator</small></div>
-      </div>
+      <div class="sidebar-user"><div class="avatar" id="sidebarAvatar">?</div><div><strong id="sidebarName">Loading...</strong><small id="sidebarCreatorType">Creator</small></div></div>
     </aside>
     <button class="sidebar-overlay" id="sidebarOverlay" aria-label="Close navigation"></button>
-
     <main class="main-content">
-      <header class="topbar">
-        <button class="menu-button" id="menuButton" aria-label="Open navigation">☰</button>
-        <div><p class="topbar-label">Overview</p><h1>Dashboard</h1></div>
-        <div class="topbar-actions"><button class="icon-button" aria-label="Notifications">🔔</button><div class="avatar" id="topbarAvatar">?</div></div>
-      </header>
-
-      <section class="welcome-row">
-        <div>
-          <p class="eyebrow">AI COMMUNICATION INTELLIGENCE</p>
-          <h2 id="welcomeName">Good afternoon.</h2>
-          <p class="muted">Here are the conversations that deserve your attention.</p>
-        </div>
-        <a class="primary-button" href="inbox.html">Open inbox</a>
-      </section>
-
-      <section class="profile-summary panel" aria-label="Creator profile">
-        <div>
-          <p class="eyebrow">YOUR CREATOR PROFILE</p>
-          <h3 id="profileCreatorType">Creator profile</h3>
-          <p id="profileEmail" class="profile-email"></p>
-          <p id="profileDescription" class="muted">Your content profile helps the AI understand what matters to you.</p>
-          <p id="profileTopics" class="profile-topics"></p>
-        </div>
-        <a href="onboarding.html" class="secondary-button">Edit profile</a>
-      </section>
-
-      <section class="stats-grid" aria-label="Message overview">
-        <article class="stat-card"><span>Important messages</span><strong>12</strong><small>+3 today</small></article>
-        <article class="stat-card"><span>Needs a reply</span><strong>8</strong><small>2 high priority</small></article>
-        <article class="stat-card"><span>Opportunities</span><strong>4</strong><small>1 new today</small></article>
-        <article class="stat-card"><span>Filtered spam</span><strong>37</strong><small>Kept out of your inbox</small></article>
-      </section>
-
-      <section class="dashboard-grid">
-        <div class="panel priority-panel">
-          <div class="panel-heading"><div><p class="eyebrow">HIGH SIGNAL</p><h3>Priority messages</h3></div><a href="inbox.html">View all</a></div>
-          <div id="priorityMessages" class="message-list"></div>
-        </div>
-        <div class="panel opportunities-panel">
-          <div class="panel-heading"><div><p class="eyebrow">OPPORTUNITIES</p><h3>Worth a look</h3></div><a href="opportunities.html">View all</a></div>
-          <div class="opportunity-card"><div class="opportunity-icon">✦</div><div><strong>GameCore Studios</strong><p>Potential gaming sponsorship</p><span>Priority 95</span></div></div>
-          <div class="opportunity-card"><div class="opportunity-icon">↗</div><div><strong>AlexGaming</strong><p>FPS tournament collaboration</p><span>Priority 87</span></div></div>
-          <div class="opportunity-card"><div class="opportunity-icon">$</div><div><strong>Nova Gear</strong><p>Product partnership enquiry</p><span>Priority 81</span></div></div>
-        </div>
-      </section>
+      <header class="topbar"><button class="menu-button" id="menuButton" aria-label="Open navigation">☰</button><div><p class="topbar-label">Overview</p><h1>Dashboard</h1></div><div class="topbar-actions"><button class="icon-button" aria-label="Notifications">🔔</button><div class="avatar" id="topbarAvatar">?</div></div></header>
+      <section class="welcome-row"><div><p class="eyebrow">AI COMMUNICATION INTELLIGENCE</p><h2 id="welcomeName">Good afternoon.</h2><p class="muted">Here are the conversations that deserve your attention.</p></div><a class="primary-button" href="inbox.html">Open inbox</a></section>
+      <section class="profile-summary panel" aria-label="Creator profile"><div><p class="eyebrow">YOUR CREATOR PROFILE</p><h3 id="profileCreatorType">Creator profile</h3><p id="profileEmail" class="profile-email"></p><p id="profileDescription" class="muted">Your content profile helps the AI understand what matters to you.</p><p id="profileTopics" class="profile-topics"></p></div><a href="onboarding.html" class="secondary-button">Edit profile</a></section>
+      <section class="stats-grid" aria-label="Message overview"><article class="stat-card"><span>Important messages</span><strong id="importantCount">0</strong><small id="importantChange">No new messages</small></article><article class="stat-card"><span>Needs a reply</span><strong id="replyCount">0</strong><small id="replyChange">No replies needed</small></article><article class="stat-card"><span>Opportunities</span><strong id="opportunityCount">0</strong><small id="opportunityChange">No opportunities yet</small></article><article class="stat-card"><span>Filtered spam</span><strong id="spamCount">0</strong><small id="spamChange">No spam filtered</small></article></section>
+      <section class="dashboard-grid"><div class="panel priority-panel"><div class="panel-heading"><div><p class="eyebrow">HIGH SIGNAL</p><h3>Priority messages</h3></div><a href="inbox.html">View all</a></div><div id="priorityMessages" class="message-list"></div></div><div class="panel opportunities-panel"><div class="panel-heading"><div><p class="eyebrow">OPPORTUNITIES</p><h3>Worth a look</h3></div><a href="opportunities.html">View all</a></div><div id="dashboardOpportunities"></div></div></section>
     </main>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/dashboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/supabase.js"></script><script src="js/app.js"></script><script src="js/dashboard.js"></script>
 </body>
 </html>
