@@ -1,12 +1,1 @@
-document.addEventListener('DOMContentLoaded',()=>{
- const sidebar=document.getElementById('sidebar');
- const menu=document.getElementById('menuButton');
- const overlay=document.getElementById('sidebarOverlay');
- const close=()=>{sidebar?.classList.remove('open');overlay?.classList.remove('show');document.body.classList.remove('nav-open');menu?.setAttribute('aria-expanded','false')};
- const open=()=>{sidebar?.classList.add('open');overlay?.classList.add('show');document.body.classList.add('nav-open');menu?.setAttribute('aria-expanded','true')};
- menu?.addEventListener('click',()=>sidebar?.classList.contains('open')?close():open());
- overlay?.addEventListener('click',close);
- document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
- window.addEventListener('resize',()=>{if(window.innerWidth>900)close()});
- document.querySelectorAll('.nav-link').forEach(link=>link.addEventListener('click',close));
-});
+const savedTheme=localStorage.getItem('sai-theme');if(savedTheme==='dark'||savedTheme==='light')document.documentElement.dataset.theme=savedTheme;document.addEventListener('DOMContentLoaded',()=>{const sidebar=document.getElementById('sidebar');const menu=document.getElementById('menuButton');const overlay=document.getElementById('sidebarOverlay');const close=()=>{sidebar?.classList.remove('open');overlay?.classList.remove('show');document.body.classList.remove('nav-open');menu?.setAttribute('aria-expanded','false')};const open=()=>{sidebar?.classList.add('open');overlay?.classList.add('show');document.body.classList.add('nav-open');menu?.setAttribute('aria-expanded','true')};menu?.addEventListener('click',()=>sidebar?.classList.contains('open')?close():open());overlay?.addEventListener('click',close);document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});window.addEventListener('resize',()=>{if(window.innerWidth>900)close()});document.querySelectorAll('.nav-link').forEach(link=>link.addEventListener('click',close));});
