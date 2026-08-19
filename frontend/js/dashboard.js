@@ -15,3 +15,55 @@ if (priorityContainer) {
     </article>
   `).join('');
 }
+
+(async () => {
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  };
+
+  try {
+    const client = await ensureSupabaseLoaded();
+    const { data: { user }, error: userError } = await client.auth.getUser();
+    if (userError || !user) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const { data: profile, error } = await client
+      .from('profiles')
+      .select('full_name, username, avatar_url, creator_type, content_description, content_topics, onboarding_completed, plan_id')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!profile) {
+      window.location.href = 'onboarding.html';
+      return;
+    }
+
+    if (!profile.onboarding_completed) {
+      window.location.href = 'onboarding.html';
+      return;
+    }
+
+    const name = profile.full_name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Creator';
+    const firstName = name.trim().split(/\s+/)[0];
+    const creatorType = profile.creator_type || 'Creator';
+
+    setText('welcomeName', `Good afternoon, ${firstName}.`);
+    setText('sidebarName', name);
+    setText('sidebarCreatorType', creatorType);
+    setText('profileCreatorType', creatorType);
+    setText('profileDescription', profile.content_description || 'No content description added yet.');
+    setText('profileTopics', profile.content_topics ? `Topics: ${profile.content_topics}` : 'No topics added yet.');
+
+    const initial = name.charAt(0).toUpperCase() || '?';
+    document.querySelectorAll('#sidebarAvatar, #topbarAvatar').forEach(el => {
+      el.textContent = initial;
+      if (profile.avatar_url) el.style.backgroundImage = `url("${profile.avatar_url}")`;
+    });
+  } catch (error) {
+    console.error('Unable to load dashboard profile:', error);
+  }
+})();
