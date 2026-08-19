@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Social AI Filter dashboard">
+  <title>Dashboard — Social AI Filter</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Main navigation">
+      <div class="brand">Social AI <span>Filter</span></div>
+      <nav class="nav-list">
+        <a class="nav-link active" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="inbox.html">Inbox</a>
+        <a class="nav-link" href="opportunities.html">Opportunities</a>
+        <a class="nav-link" href="content.html">Content</a>
+        <a class="nav-link" href="settings.html">Settings</a>
+      </nav>
+      <div class="sidebar-user">
+        <div class="avatar">M</div>
+        <div><strong>Mosken</strong><small>Creator</small></div>
+      </div>
+    </aside>
+    <button class="sidebar-overlay" id="sidebarOverlay" aria-label="Close navigation"></button>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="menu-button" id="menuButton" aria-label="Open navigation">☰</button>
+        <div>
+          <p class="topbar-label">Overview</p>
+          <h1>Dashboard</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" aria-label="Notifications">🔔</button>
+          <div class="avatar">M</div>
+        </div>
+      </header>
+
+      <section class="welcome-row">
+        <div>
+          <p class="eyebrow">AI COMMUNICATION INTELLIGENCE</p>
+          <h2>Good afternoon, Mosken.</h2>
+          <p class="muted">Here are the conversations that deserve your attention.</p>
+        </div>
+        <a class="primary-button" href="inbox.html">Open inbox</a>
+      </section>
+
+      <section class="stats-grid" aria-label="Message overview">
+        <article class="stat-card"><span>Important messages</span><strong>12</strong><small>+3 today</small></article>
+        <article class="stat-card"><span>Needs a reply</span><strong>8</strong><small>2 high priority</small></article>
+        <article class="stat-card"><span>Opportunities</span><strong>4</strong><small>1 new today</small></article>
+        <article class="stat-card"><span>Filtered spam</span><strong>37</strong><small>Kept out of your inbox</small></article>
+      </section>
+
+      <section class="dashboard-grid">
+        <div class="panel priority-panel">
+          <div class="panel-heading"><div><p class="eyebrow">HIGH SIGNAL</p><h3>Priority messages</h3></div><a href="inbox.html">View all</a></div>
+          <div id="priorityMessages" class="message-list"></div>
+        </div>
+        <div class="panel opportunities-panel">
+          <div class="panel-heading"><div><p class="eyebrow">OPPORTUNITIES</p><h3>Worth a look</h3></div><a href="opportunities.html">View all</a></div>
+          <div class="opportunity-card"><div class="opportunity-icon">✦</div><div><strong>GameCore Studios</strong><p>Potential gaming sponsorship</p><span>Priority 95</span></div></div>
+          <div class="opportunity-card"><div class="opportunity-icon">↗</div><div><strong>AlexGaming</strong><p>FPS tournament collaboration</p><span>Priority 87</span></div></div>
+          <div class="opportunity-card"><div class="opportunity-icon">$</div><div><strong>Nova Gear</strong><p>Product partnership enquiry</p><span>Priority 81</span></div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
