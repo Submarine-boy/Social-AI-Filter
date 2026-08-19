@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automations — Social AI Filter</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/automations.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">SOCIAL AI FILTER</div>
+      <nav class="sidebar-nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="inbox.html">Inbox</a>
+        <a href="opportunities.html">Opportunities</a>
+        <a href="content.html">Content</a>
+        <a href="smart-priorities.html">Smart Priorities</a>
+        <a class="active" href="automations.html">Automations</a>
+        <a href="accounts.html">Accounts</a>
+        <a href="settings.html">Settings</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <header class="page-header">
+        <div>
+          <span class="eyebrow">AI WORKFLOWS</span>
+          <h1>Automations</h1>
+          <p>Let Social AI Filter handle repetitive messages while you stay in control.</p>
+        </div>
+        <button class="primary-btn" type="button">+ Create automation</button>
+      </header>
+
+      <section class="automation-overview">
+        <article class="overview-card"><span>Active</span><strong>2</strong><small>automations running</small></article>
+        <article class="overview-card"><span>Handled today</span><strong>47</strong><small>messages processed</small></article>
+        <article class="overview-card"><span>Needs review</span><strong>3</strong><small>messages held for you</small></article>
+      </section>
+
+      <section class="automation-list">
+        <div class="section-heading"><div><h2>Your automations</h2><p>Rules are applied after AI classifies incoming messages.</p></div></div>
+
+        <article class="automation-card">
+          <div class="automation-icon">✦</div>
+          <div class="automation-body">
+            <div class="automation-title"><h3>Spam messages</h3><span class="status active">Active</span></div>
+            <p>Automatically send a polite default response to messages classified as spam.</p>
+            <div class="automation-meta"><span>Trigger: Spam</span><span>Response: Default spam reply</span></div>
+          </div>
+          <label class="switch"><input type="checkbox" checked><span></span></label>
+        </article>
+
+        <article class="automation-card">
+          <div class="automation-icon">♥</div>
+          <div class="automation-body">
+            <div class="automation-title"><h3>Fan messages</h3><span class="status active">Active</span></div>
+            <p>Send a friendly default response to genuine fan messages while preserving priority conversations.</p>
+            <div class="automation-meta"><span>Trigger: Fan</span><span>Response: Fan reply</span></div>
+          </div>
+          <label class="switch"><input type="checkbox" checked><span></span></label>
+        </article>
+
+        <article class="automation-card muted-card">
+          <div class="automation-icon">◌</div>
+          <div class="automation-body">
+            <div class="automation-title"><h3>High-priority messages</h3><span class="status paused">Protected</span></div>
+            <p>High-priority messages are never automatically answered. They remain in your Inbox for personal review.</p>
+            <div class="automation-meta"><span>Trigger: Priority</span><span>Action: Require review</span></div>
+          </div>
+          <span class="protected-label">Protected</span>
+        </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
