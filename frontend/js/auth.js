@@ -1,5 +1,6 @@
 const SUPABASE_URL = "https://wfypcyxogxqdmobvyzdg.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_lnR1MO-JdfcASAzhvfI37g_PP3G7hGw";
+const EMAIL_REDIRECT_URL = "https://social-ai-filter.vercel.app/dashboard.html";
 
 function loadSupabase() {
   return new Promise((resolve, reject) => {
@@ -80,7 +81,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const { data: result, error } = await client.auth.signUp({
           email,
           password,
-          options: { data: { full_name: fullName } }
+          options: {
+            data: { full_name: fullName },
+            emailRedirectTo: EMAIL_REDIRECT_URL
+          }
         });
 
         if (error) {
@@ -94,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           return;
         }
 
-        setAuthMessage("Account created. Check your email to confirm your account before logging in.", false);
+        setAuthMessage("Account created. Check your email and click the confirmation link to continue to your dashboard.", false);
         signupForm.reset();
         if (button) { button.disabled = false; button.textContent = "Create Account"; }
       });
