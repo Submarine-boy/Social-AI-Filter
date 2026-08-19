@@ -41,7 +41,6 @@ if (priorityContainer) {
       window.location.href = 'onboarding.html';
       return;
     }
-
     if (!profile.onboarding_completed) {
       window.location.href = 'onboarding.html';
       return;
@@ -55,6 +54,7 @@ if (priorityContainer) {
     setText('sidebarName', name);
     setText('sidebarCreatorType', creatorType);
     setText('profileCreatorType', creatorType);
+    setText('profileEmail', user.email || '');
     setText('profileDescription', profile.content_description || 'No content description added yet.');
     setText('profileTopics', profile.content_topics ? `Topics: ${profile.content_topics}` : 'No topics added yet.');
 
