@@ -19,6 +19,16 @@ function setAuthMessage(message, isError = true) {
   element.style.color = isError ? "var(--danger, #dc2626)" : "var(--accent, #2563eb)";
 }
 
+async function routeAfterAuth(client, user) {
+  const { data: profile } = await client
+    .from("profiles")
+    .select("onboarding_completed")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  window.location.href = profile?.onboarding_completed ? "dashboard.html" : "onboarding.html";
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   const loginForm = document.querySelector("#login-form");
   const signupForm = document.querySelector("#signup-form");
@@ -35,24 +45,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         const email = String(data.get("email") || "").trim();
         const password = String(data.get("password") || "");
 
-        if (button) {
-          button.disabled = true;
-          button.textContent = "Signing in...";
-        }
+        if (button) { button.disabled = true; button.textContent = "Signing in..."; }
         setAuthMessage("", false);
 
-        const { error } = await client.auth.signInWithPassword({ email, password });
-
+        const { data: result, error } = await client.auth.signInWithPassword({ email, password });
         if (error) {
           setAuthMessage(error.message);
-          if (button) {
-            button.disabled = false;
-            button.textContent = "Login";
-          }
+          if (button) { button.disabled = false; button.textContent = "Login"; }
           return;
         }
 
-        window.location.href = "dashboard.html";
+        await routeAfterAuth(client, result.user);
       });
     }
 
@@ -71,42 +74,29 @@ document.addEventListener("DOMContentLoaded", async () => {
           return;
         }
 
-        if (button) {
-          button.disabled = true;
-          button.textContent = "Creating account...";
-        }
+        if (button) { button.disabled = true; button.textContent = "Creating account..."; }
         setAuthMessage("", false);
 
         const { data: result, error } = await client.auth.signUp({
           email,
           password,
-          options: {
-            data: {
-              full_name: fullName
-            }
-          }
+          options: { data: { full_name: fullName } }
         });
 
         if (error) {
           setAuthMessage(error.message);
-          if (button) {
-            button.disabled = false;
-            button.textContent = "Create Account";
-          }
+          if (button) { button.disabled = false; button.textContent = "Create Account"; }
           return;
         }
 
-        if (result.session) {
-          window.location.href = "dashboard.html";
+        if (result.session && result.user) {
+          await routeAfterAuth(client, result.user);
           return;
         }
 
         setAuthMessage("Account created. Check your email to confirm your account before logging in.", false);
         signupForm.reset();
-        if (button) {
-          button.disabled = false;
-          button.textContent = "Create Account";
-        }
+        if (button) { button.disabled = false; button.textContent = "Create Account"; }
       });
     }
   } catch (error) {
