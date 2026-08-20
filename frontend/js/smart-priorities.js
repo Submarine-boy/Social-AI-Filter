@@ -16,11 +16,10 @@ function render(){
   list.innerHTML=priorities.length
     ? priorities.map(p=>`<article class="priority-card">
         <div class="priority-card-head">
-          <strong>${escapeHtml(p.name||p.title||'Smart Priority')}</strong>
+          <strong>${escapeHtml(p.title||'Smart Priority')}</strong>
           <span class="priority-badge">${p.is_active===false?'Inactive':'Active'}</span>
         </div>
-        ${p.title?`<small class="priority-title">${escapeHtml(p.title)}</small>`:''}
-        <p>${escapeHtml(p.instruction)}</p>
+        <p>${escapeHtml(p.instruction||'')}</p>
         <div class="priority-card-actions">
           <button data-toggle="${escapeHtml(p.id)}">${p.is_active===false?'Enable':'Disable'}</button>
           <button data-delete="${escapeHtml(p.id)}">Delete</button>
@@ -60,7 +59,7 @@ function render(){
 
 async function loadPriorities(){
   const {data,error}=await client.from('smart_priorities')
-    .select('id,user_id,name,instruction,title,is_active,updated_at,created_at')
+    .select('id,user_id,instruction,title,is_active,updated_at,created_at')
     .eq('user_id',currentUser.id)
     .order('created_at',{ascending:true});
   if(error)throw error;
@@ -82,12 +81,12 @@ document.getElementById('savePriority')?.addEventListener('click',async()=>{
     return;
   }
 
-  const name=document.getElementById('priorityName').value.trim();
+  const title=document.getElementById('priorityName').value.trim();
   const instruction=document.getElementById('priorityInstruction').value.trim();
   const level=document.getElementById('priorityLevel').value;
   const button=document.getElementById('savePriority');
 
-  if(!name||!instruction){
+  if(!title||!instruction){
     alert('Enter a priority name and tell the AI what to prioritize.');
     return;
   }
@@ -95,11 +94,9 @@ document.getElementById('savePriority')?.addEventListener('click',async()=>{
   button.disabled=true;
   button.textContent='Saving...';
 
-  const title=name;
   const fullInstruction=`Importance: ${level}. ${instruction}`;
   const {data,error}=await client.from('smart_priorities').insert({
     user_id:currentUser.id,
-    name,
     instruction:fullInstruction,
     title,
     is_active:true,
@@ -125,6 +122,9 @@ document.getElementById('savePriority')?.addEventListener('click',async()=>{
 
 (async()=>{
   try{
+    if(typeof ensureSupabaseLoaded!=='function'){
+      throw new Error('Supabase client loader is unavailable.');
+    }
     client=await ensureSupabaseLoaded();
     const {data:{user},error}=await client.auth.getUser();
     if(error)throw error;
