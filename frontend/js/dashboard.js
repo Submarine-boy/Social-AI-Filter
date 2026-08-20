@@ -1,10 +1,61 @@
 const priorityContainer = document.getElementById('priorityMessages');
 const opportunityContainer = document.getElementById('dashboardOpportunities');
+const notificationButton = document.getElementById('notificationsButton');
+const notificationMenu = document.getElementById('notificationsMenu');
+const notificationList = document.getElementById('notificationList');
+const notificationCount = document.getElementById('notificationCount');
 const esc = value => { const d=document.createElement('div'); d.textContent=value ?? ''; return d.innerHTML; };
 const setText = (id, value) => { const el=document.getElementById(id); if(el) el.textContent=value; };
 const relativeTime = date => { if(!date) return ''; const s=Math.max(0,Math.floor((Date.now()-new Date(date).getTime())/1000)); if(s<60)return 'Just now'; if(s<3600)return `${Math.floor(s/60)} min ago`; if(s<86400)return `${Math.floor(s/3600)} hr ago`; return new Date(date).toLocaleDateString(); };
 const categoryOf = m => m.is_spam ? 'Spam' : (m.category || 'General');
 const scoreOf = m => Number(m.priority_score ?? 0);
+const messageTitle = m => {
+  const text = String(m.message_text || '').trim().replace(/\s+/g, ' ');
+  return text || 'Untitled message';
+};
+
+function renderNotifications(messages) {
+  if (!notificationList) return;
+
+  const highPriority = messages
+    .filter(m => scoreOf(m) > 70)
+    .sort((a,b) => new Date(b.received_at || b.created_at || 0).getTime() - new Date(a.received_at || a.created_at || 0).getTime());
+
+  if (notificationCount) notificationCount.textContent = highPriority.length;
+
+  notificationList.innerHTML = highPriority.length
+    ? highPriority.map(m => `<a class="notification-item" href="inbox.html" data-message-id="${esc(m.id)}">
+        <div class="notification-item-top">
+          <strong>${esc(messageTitle(m))}</strong>
+          <span>${esc(relativeTime(m.received_at || m.created_at))}</span>
+        </div>
+        <div class="notification-item-meta">Priority ${scoreOf(m)} · ${esc(m.sender_name || m.sender_username || 'Unknown sender')}</div>
+      </a>`).join('')
+    : '<div class="notification-empty">No messages above 70 priority.</div>';
+}
+
+function closeNotifications() {
+  if (!notificationMenu || !notificationButton) return;
+  notificationMenu.hidden = true;
+  notificationButton.setAttribute('aria-expanded', 'false');
+}
+
+notificationButton?.addEventListener('click', event => {
+  event.stopPropagation();
+  if (!notificationMenu) return;
+  const open = notificationMenu.hidden;
+  notificationMenu.hidden = !open;
+  notificationButton.setAttribute('aria-expanded', String(open));
+});
+
+document.addEventListener('click', event => {
+  if (!notificationMenu || notificationMenu.hidden) return;
+  if (!notificationMenu.contains(event.target) && !notificationButton?.contains(event.target)) closeNotifications();
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeNotifications();
+});
 
 (async () => {
   try {
@@ -30,6 +81,11 @@ const scoreOf = m => Number(m.priority_score ?? 0);
     const { data: messages, error: messageError } = await client.from('messages').select('id,sender_name,sender_username,message_text,category,priority_score,priority_level,relevance_score,is_spam,needs_reply,received_at,created_at,direction').eq('user_id',user.id).eq('direction','incoming').order('received_at',{ascending:false});
     if(messageError) throw messageError;
     const all=messages||[];
+
+    // Notifications: every incoming message with a score strictly above 70,
+    // newest first according to the time the message was received.
+    renderNotifications(all);
+
     const important=all.filter(m=>!m.is_spam && (m.priority_level==='high'||scoreOf(m)>=75));
     const needsReply=all.filter(m=>m.needs_reply&&!m.is_spam);
     const spam=all.filter(m=>m.is_spam);
@@ -45,5 +101,5 @@ const scoreOf = m => Number(m.priority_score ?? 0);
 
     const topOpp=opportunities.slice(0,4);
     if(opportunityContainer) opportunityContainer.innerHTML=topOpp.length?topOpp.map((m,i)=>`<div class="opportunity-card"><div class="opportunity-icon">${i===0?'✦':i===1?'↗':'$'}</div><div><strong>${esc(m.sender_name||m.sender_username||'Unknown sender')}</strong><p>${esc(m.category||'Opportunity')}</p><span>Priority ${scoreOf(m)}</span></div></div>`).join(''):'<div class="empty-state"><p>No opportunities yet.</p></div>';
-  } catch(error) { console.error('Unable to load dashboard:',error); if(priorityContainer) priorityContainer.innerHTML='<div class="empty-state"><p>Unable to load messages.</p></div>'; if(opportunityContainer) opportunityContainer.innerHTML='<div class="empty-state"><p>Unable to load opportunities.</p></div>'; }
+  } catch(error) { console.error('Unable to load dashboard:',error); if(priorityContainer) priorityContainer.innerHTML='<div class="empty-state"><p>Unable to load messages.</p></div>'; if(opportunityContainer) opportunityContainer.innerHTML='<div class="empty-state"><p>Unable to load opportunities.</p></div>'; if(notificationList) notificationList.innerHTML='<div class="notification-empty">Unable to load notifications.</div>'; }
 })();
