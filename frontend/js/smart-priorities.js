@@ -1,9 +1,10 @@
-const planLimit=2;
 const list=document.getElementById('priorityList');
 const limit=document.getElementById('limitText');
 let client=null;
 let currentUser=null;
 let priorities=[];
+let planLimit=2;
+let planName='Free';
 
 function escapeHtml(value=''){
   return String(value).replace(/[&<>'"]/g,char=>({
@@ -11,8 +12,12 @@ function escapeHtml(value=''){
   }[char]));
 }
 
+function isUnlimited(){
+  return planLimit===null || planLimit===undefined || planLimit>=999999;
+}
+
 function render(){
-  limit.textContent=`${priorities.length} / ${planLimit}`;
+  limit.textContent=isUnlimited()?`${priorities.length} / Unlimited`:`${priorities.length} / ${planLimit}`;
   list.innerHTML=priorities.length
     ? priorities.map(p=>`<article class="priority-card">
         <div class="priority-card-head">
@@ -57,6 +62,45 @@ function render(){
   }));
 }
 
+async function loadPlan(){
+  const {data:subscription,error:subscriptionError}=await client.from('user_subscriptions')
+    .select('id,plan_id,status,current_period_end')
+    .eq('user_id',currentUser.id)
+    .eq('status','active')
+    .maybeSingle();
+
+  if(subscriptionError)throw subscriptionError;
+
+  if(!subscription){
+    // Users without a subscription are treated as Free until billing is connected.
+    planName='Free';
+    const {data:freePlan,error:freeError}=await client.from('subscription_plans')
+      .select('name,smart_priorities_limit')
+      .eq('name','Free')
+      .eq('active',true)
+      .maybeSingle();
+    if(freeError)throw freeError;
+    planLimit=freePlan?.smart_priorities_limit ?? 2;
+    return;
+  }
+
+  if(subscription.current_period_end && new Date(subscription.current_period_end)<new Date()){
+    planName='Free';
+    planLimit=2;
+    return;
+  }
+
+  const {data:plan,error:planError}=await client.from('subscription_plans')
+    .select('name,smart_priorities_limit')
+    .eq('id',subscription.plan_id)
+    .eq('active',true)
+    .single();
+
+  if(planError)throw planError;
+  planName=plan.name||'Free';
+  planLimit=plan.smart_priorities_limit ?? 2;
+}
+
 async function loadPriorities(){
   const {data,error}=await client.from('smart_priorities')
     .select('id,user_id,instruction,title,is_active,updated_at,created_at')
@@ -67,17 +111,21 @@ async function loadPriorities(){
   render();
 }
 
+function canCreatePriority(){
+  return isUnlimited() || priorities.length<planLimit;
+}
+
 document.getElementById('addPriority')?.addEventListener('click',()=>{
-  if(priorities.length>=planLimit){
-    alert('You have reached your Smart Priorities limit. Upgrade your plan to add more.');
+  if(!canCreatePriority()){
+    alert(`Your ${planName} plan allows ${planLimit} Smart Priorities. Upgrade your plan to add more.`);
     return;
   }
   document.getElementById('priorityName').focus();
 });
 
 document.getElementById('savePriority')?.addEventListener('click',async()=>{
-  if(priorities.length>=planLimit){
-    alert('You have reached your Smart Priorities limit. Upgrade your plan to add more.');
+  if(!canCreatePriority()){
+    alert(`Your ${planName} plan allows ${planLimit} Smart Priorities. Upgrade your plan to add more.`);
     return;
   }
 
@@ -130,6 +178,7 @@ document.getElementById('savePriority')?.addEventListener('click',async()=>{
     if(error)throw error;
     if(!user){window.location.href='login.html';return;}
     currentUser=user;
+    await loadPlan();
     await loadPriorities();
   }catch(error){
     console.error('Unable to load Smart Priorities:',error);
