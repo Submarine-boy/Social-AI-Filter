@@ -1,24 +1,16 @@
-const SUPABASE_URL = "https://wfypcyxogxqdmobvyzdg.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_lnR1MO-JdfcASAzhvfI37g_PP3G7hGw";
-
-function ensureSupabaseLoaded() {
-  return new Promise((resolve, reject) => {
-    if (window.supabase?.createClient) return resolve(window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY));
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
-    script.onload = () => window.supabase?.createClient ? resolve(window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)) : reject(new Error("Supabase client failed to initialize."));
-    script.onerror = () => reject(new Error("Unable to load Supabase."));
-    document.head.appendChild(script);
-  });
-}
+// Shared UI behaviour. Supabase configuration and ensureSupabaseLoaded()
+// are provided by js/supabase.js, which must be loaded before this file.
 
 const savedTheme = localStorage.getItem('sai-theme');
-if (savedTheme === 'dark' || savedTheme === 'light') document.documentElement.dataset.theme = savedTheme;
+if (savedTheme === 'dark' || savedTheme === 'light') {
+  document.documentElement.dataset.theme = savedTheme;
+}
 
 function setupMobileNavigation() {
   const sidebar = document.getElementById('sidebar');
   const menu = document.getElementById('menuButton');
   const overlay = document.getElementById('sidebarOverlay');
+
   if (!sidebar || !menu || !overlay) return;
 
   const closeNav = () => {
@@ -37,19 +29,38 @@ function setupMobileNavigation() {
     menu.setAttribute('aria-expanded', 'true');
   };
 
-  menu.onclick = (event) => {
+  menu.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (window.innerWidth > 900) return;
-    sidebar.classList.contains('open') ? closeNav() : openNav();
-  };
 
-  overlay.onclick = closeNav;
-  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeNav(); });
-  document.querySelectorAll('.sidebar .nav-link').forEach((link) => link.addEventListener('click', closeNav));
-  window.addEventListener('resize', () => { if (window.innerWidth > 900) closeNav(); });
+    if (window.innerWidth > 900) return;
+
+    if (sidebar.classList.contains('open')) {
+      closeNav();
+    } else {
+      openNav();
+    }
+  });
+
+  overlay.addEventListener('click', closeNav);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeNav();
+  });
+
+  document.querySelectorAll('.sidebar .nav-link').forEach((link) => {
+    link.addEventListener('click', closeNav);
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900) closeNav();
+  });
+
   closeNav();
 }
 
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupMobileNavigation);
-else setupMobileNavigation();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupMobileNavigation, { once: true });
+} else {
+  setupMobileNavigation();
+}
